@@ -37,3 +37,24 @@ Robust methodology that can be updated with new satellite data.
 - `combined_index` is an example of a weighted index; weights can be adjusted for analysis purposes.  
 - Visualization types can be combined: Cartopy for high-quality static maps, Plotly for interactive plotting, and Folium for geographic exploration.
 
+## Project Files Description
+
+This repository contains files related to the shark occurrence probability mapping project using remote sensing data.
+
+### Data Files
+
+- **SWOT_WindWave.nc**  
+  Contains information about wave height and sea surface dynamics from the SWOT mission. This file is used to evaluate the influence of waves on shark occurrence probability.
+
+- **PACE_OCI.clorofila_fitoplancton.nc**  
+  Contains chlorophyll-a data from the PACE mission, representing phytoplankton concentration. Chlorophyll is used as an indicator of primary productivity, which is essential for understanding the distribution of the marine food chain base.
+
+- **AQUA_MODIS_Temperature.nc**  
+  Contains sea surface temperature data obtained from the MODIS sensor onboard the AQUA satellite. Water temperature directly influences the preferred habitats of sharks.
+
+### Visualization File
+
+- **mapa_interativo_tubarao (4).html**  
+  HTML file containing the interactive map generated from the combination of chlorophyll, temperature, and wave height data. It allows geographic visualization of regions with higher shark occurrence probability using interactive points and color gradients.
+
+> **Note:** The first three files (`.nc`) are used for preprocessing and calculating the combined probability index, while the HTML file is the interactive visual representation of the final result.
