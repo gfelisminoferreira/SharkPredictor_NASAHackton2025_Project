@@ -58,3 +58,6 @@ This repository contains files related to the shark occurrence probability mappi
   HTML file containing the interactive map generated from the combination of chlorophyll, temperature, and wave height data. It allows geographic visualization of regions with higher shark occurrence probability using interactive points and color gradients.
 
 > **Note:** The first three files (`.nc`) are used for preprocessing and calculating the combined probability index, while the HTML file is the interactive visual representation of the final result.
+
+
+It​=α∗NPACE​+β∗TMODIS​+γ∗WSWOT
