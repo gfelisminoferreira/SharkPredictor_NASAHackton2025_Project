@@ -18,3 +18,22 @@ Combined index of chlorophyll, temperature, and wave height.
 Interactive and exportable visualizations in HTML and PNG.
 
 Robust methodology that can be updated with new satellite data.
+
+
+| Cell | Content / Function | Variables / Objects | Detailed Explanation |
+|------|-----------------|------------------|--------------------|
+| 1 | Google Drive connection | `drive` | Mounts Google Drive in Colab to access data files. |
+| 2 | Library installation | `!pip install ...` | Installs all necessary libraries: `xarray` and `rioxarray` for NetCDF, `matplotlib` and `cartopy` for static maps, `plotly` and `folium` for interactive visualizations. |
+| 3 | File paths definition | `path_pace`, `path_modis`, `path_swot` | Stores the paths of PACE, MODIS, and SWOT files in Drive; used to open datasets. |
+| 4 | Dataset loading and checking | `ds_pace`, `ds_modis`, `ds_swot`<br>Function `open_dataset_safe()` | Opens NetCDF files using `xarray` safely, checks if they exist, and prints basic summary of each dataset. |
+| 5 | Preprocessing | `preprocess_data()`<br>`chlor_a_norm`, `sst_norm`, `swh_norm` | Removes NaNs, averages over temporal dimension if present, and normalizes values to 0–1 scale. |
+| 6 | Data combination | `combined_index`<br>`weight_chl`, `weight_sst`, `weight_swh` | Creates a combined environmental index using a weighted average of normalized chlorophyll, SST, and wave height data. |
+| 7 | Plotting with Cartopy | `plot_global_map()`<br>`lat2d_pace`, `lon2d_pace`, `lat2d_modis`, `lon2d_modis` | Function for global plotting in PlateCarree projection; adds land, coastlines, oceans, gridlines, and colorbar; used for PACE, MODIS, and combined index. |
+| 8 | Interactive visualization with Plotly | `fig` | Displays the combined index on an interactive map with zoom, pan, and hover value reading. |
+| 9 | Interactive map with Folium | `m`, `heat_data` | Generates a global interactive map with heat points showing index intensity; useful for geographic exploration. |
+
+**Notes:**  
+- `preprocess_data()` is reusable for any 2D or 3D dataset.  
+- `combined_index` is an example of a weighted index; weights can be adjusted for analysis purposes.  
+- Visualization types can be combined: Cartopy for high-quality static maps, Plotly for interactive plotting, and Folium for geographic exploration.
+
