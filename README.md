@@ -119,17 +119,23 @@ The tool allows scientists and conservationists to **visualize, quantify, and pr
 ---
 
 ## 📂 Repository Structure
-├── PACE_OCI.clorofila_fitoplancton.nc # Chlorophyll data (PACE mission)
-├── AQUA_MODIS_Temperature.nc # SST data (MODIS Aqua)
-├── SWOT_WindWave.nc # Sea wave height data (SWOT mission)
-├── mapa_interativo_tubarao.html # Final interactive probability map
-├── preprocessing_and_mapping.ipynb # Full Google Colab code
-└── README_EN.md # This document
+
+| File Name                              | Description                                |
+|----------------------------------------|--------------------------------------------|
+| `PACE_OCI.clorofila_fitoplancton.nc`   | Chlorophyll data (PACE mission)            |
+| `AQUA_MODIS_Temperature.nc`            | SST data (MODIS Aqua)                      |
+| `SWOT_WindWave.nc`                     | Sea wave height data (SWOT mission)        |
+| `mapa_interativo_tubarao.html`         | Final interactive probability map          |
+| `preprocessing_and_mapping.ipynb`      | Full Google Colab code                     |
+| `README_EN.md`                         | This document                              |
+
+---
 
 To reproduce or visualize the analysis locally, install the required packages:
 
 ```bash
 pip install xarray rasterio folium numpy matplotlib netCDF4
+
 
 🧠 Authors
 
