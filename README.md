@@ -1,63 +1,162 @@
-# SharkPredictor_NASAHackton2025_Project
-A global shark presence prediction and mapping system combining satellite data (MODIS, SWOT, and PACE) with an environmental probability mathematical model, implemented in Python using Google Colab and integrated with Google Earth Engine.
+# 🦈 Shark Predictive Mapping – Neutronics Team | NASA Space Apps Challenge 2025
 
-Project: Shark Occurrence Prediction – NASA Hackathon 2025
+## 🌍 Project Overview
+This project, developed by the **Neutronics Team** for the **NASA Space Apps Challenge 2025**, aims to build a predictive model capable of identifying the most likely marine regions to contain **sharks**.  
+The project combines **satellite data** from different missions (SWOT, PACE, and MODIS) and integrates them using a **mathematical probability formula**, visualized in an **interactive map** generated via Python and Google Colab.
 
-This project aims to generate global probability maps of shark occurrences using satellite data: chlorophyll (PACE), sea surface temperature (MODIS), and wave height (SWOT). The final index combines these variables into a mathematical formula that estimates the likelihood of shark presence, allowing identification of high-risk or conservation-interest areas.
+The purpose is to demonstrate how open satellite data and machine learning-inspired modeling can support **marine ecosystem monitoring**, **biodiversity protection**, and the understanding of **predator behavior** through environmental correlations.
 
-The code processes the data and produces both static and interactive maps, highlighting regions with higher index values (0–1). The interactive map uses the Turbo color scale (blue → red) to indicate probability intensity.
+---
 
-This project provides a powerful visual tool for researchers, environmental agencies, and conservation planners, helping protect marine ecosystems and contributing to biodiversity studies and coastal safety.
+## 📡 1. Data Acquisition and Ecological Context
 
-Key outcomes:
+The base datasets used in this project were obtained from **NASA’s satellite missions**:
+| Dataset | Mission | Variable | Description |
+|----------|----------|-----------|-------------|
+| `SWOT_WindWave.nc` | SWOT | SWH (Significant Wave Height) | Ocean surface height and wave amplitude |
+| `PACE_OCI.clorofila_fitoplancton.nc` | PACE | Chlorophyll-a concentration | Indicator of phytoplankton abundance |
+| `AQUA_MODIS_Temperature.nc` | MODIS (Aqua) | Sea Surface Temperature (SST) | Ocean temperature at the surface |
+| `mapa_interativo_tubarao.html` | - | - | Interactive heat map generated in Python |
 
-Global probability maps of shark presence.
+These datasets represent key ecological indicators that affect **shark distribution**, such as:
+- **Temperature:** influences metabolic activity and migration routes.  
+- **Phytoplankton (Chlorophyll-a):** indicates primary productivity and abundance of prey.  
+- **Wave height:** relates to surface mixing and accessibility for hunting.
 
-Combined index of chlorophyll, temperature, and wave height.
+---
 
-Interactive and exportable visualizations in HTML and PNG.
+## ⚙️ 2. Electronic Tag Prototype (ESP32 Tracking System)
 
-Robust methodology that can be updated with new satellite data.
+To connect the real-world observation of sharks to the computational model, a **hardware prototype** was designed using an **ESP32 microcontroller**, simulating a **biotelemetry tag**.
 
+### 🔧 Hardware Components
+| Component | Function |
+|------------|-----------|
+| **ESP32** | Main processing and communication module |
+| **GPS Module (NEO-6M)** | Provides geolocation (latitude, longitude) |
+| **Temperature Sensor (DS18B20)** | Measures water temperature |
+| **Pressure Sensor (BMP280)** | Simulates depth level |
+| **Micro SD Card Module** | Stores sensor and position data |
+| **Battery + Waterproof Casing** | Provides energy and protection in aquatic environments |
 
-| Cell | Content / Function | Variables / Objects | Detailed Explanation |
-|------|-----------------|------------------|--------------------|
-| 1 | Google Drive connection | `drive` | Mounts Google Drive in Colab to access data files. |
-| 2 | Library installation | `!pip install ...` | Installs all necessary libraries: `xarray` and `rioxarray` for NetCDF, `matplotlib` and `cartopy` for static maps, `plotly` and `folium` for interactive visualizations. |
-| 3 | File paths definition | `path_pace`, `path_modis`, `path_swot` | Stores the paths of PACE, MODIS, and SWOT files in Drive; used to open datasets. |
-| 4 | Dataset loading and checking | `ds_pace`, `ds_modis`, `ds_swot`<br>Function `open_dataset_safe()` | Opens NetCDF files using `xarray` safely, checks if they exist, and prints basic summary of each dataset. |
-| 5 | Preprocessing | `preprocess_data()`<br>`chlor_a_norm`, `sst_norm`, `swh_norm` | Removes NaNs, averages over temporal dimension if present, and normalizes values to 0–1 scale. |
-| 6 | Data combination | `combined_index`<br>`weight_chl`, `weight_sst`, `weight_swh` | Creates a combined environmental index using a weighted average of normalized chlorophyll, SST, and wave height data. |
-| 7 | Plotting with Cartopy | `plot_global_map()`<br>`lat2d_pace`, `lon2d_pace`, `lat2d_modis`, `lon2d_modis` | Function for global plotting in PlateCarree projection; adds land, coastlines, oceans, gridlines, and colorbar; used for PACE, MODIS, and combined index. |
-| 8 | Interactive visualization with Plotly | `fig` | Displays the combined index on an interactive map with zoom, pan, and hover value reading. |
-| 9 | Interactive map with Folium | `m`, `heat_data` | Generates a global interactive map with heat points showing index intensity; useful for geographic exploration. |
+The prototype collects and transmits the data periodically, simulating a real shark tag, and generates telemetry that mirrors the satellite data structures used in the Python model.
 
-**Notes:**  
-- `preprocess_data()` is reusable for any 2D or 3D dataset.  
-- `combined_index` is an example of a weighted index; weights can be adjusted for analysis purposes.  
-- Visualization types can be combined: Cartopy for high-quality static maps, Plotly for interactive plotting, and Folium for geographic exploration.
+This creates a **direct bridge between field measurements and satellite-derived modeling**, forming the backbone for future real-time predictive systems.
 
-## Project Files Description
+---
 
-This repository contains files related to the shark occurrence probability mapping project using remote sensing data.
+## 🧮 3. Mathematical Probability Formula
 
-### Data Files
+To quantify the probability of shark presence, the project applied a **weighted normalization formula** that integrates the three environmental variables (chlorophyll, SST, and SWH):
 
-- **SWOT_WindWave.nc**  
-  Contains information about wave height and sea surface dynamics from the SWOT mission. This file is used to evaluate the influence of waves on shark occurrence probability.
+```math
+I = α * (1 - |SST - SSTₒₚₜ| / ΔSST) + β * (Chl / max(Chl)) + γ * (1 - SWH / max(SWH))
+Where:
 
-- **PACE_OCI.clorofila_fitoplancton.nc**  
-  Contains chlorophyll-a data from the PACE mission, representing phytoplankton concentration. Chlorophyll is used as an indicator of primary productivity, which is essential for understanding the distribution of the marine food chain base.
+𝐼
+I: Shark probability index (0 to 1)
 
-- **AQUA_MODIS_Temperature.nc**  
-  Contains sea surface temperature data obtained from the MODIS sensor onboard the AQUA satellite. Water temperature directly influences the preferred habitats of sharks.
+𝛼
+,
+𝛽
+,
+𝛾
+α,β,γ: Weights for each variable (0.5, 0.3, 0.2 respectively)
 
-### Visualization File
+𝑆
+𝑆
+𝑇
+𝑜
+𝑝
+𝑡
+SST 
+opt
+​
+ : Optimal temperature for shark activity (based on ecological literature)
 
-- **mapa_interativo_tubarao (4).html**  
-  HTML file containing the interactive map generated from the combination of chlorophyll, temperature, and wave height data. It allows geographic visualization of regions with higher shark occurrence probability using interactive points and color gradients.
+Δ
+𝑆
+𝑆
+𝑇
+ΔSST: Temperature range normalization
 
-> **Note:** The first three files (`.nc`) are used for preprocessing and calculating the combined probability index, while the HTML file is the interactive visual representation of the final result.
+𝐶
+ℎ
+𝑙
+Chl: Chlorophyll concentration
 
+𝑆
+𝑊
+𝐻
+SWH: Significant Wave Height
 
-It​=α∗NPACE​+β∗TMODIS​+γ∗WSWOT
+This formula produces a composite map of potential shark presence, normalized between 0 (low likelihood) and 1 (high likelihood).
+
+💻 4. Code Operation and Processing Pipeline
+The entire data processing pipeline was implemented in Google Colab using Python and scientific libraries such as:
+xarray, rasterio, folium, and numpy.
+
+🧠 Processing Steps
+Load the NetCDF datasets (PACE, MODIS, and SWOT).
+
+Resample all datasets to a common grid (0.1° resolution) to ensure spatial alignment.
+
+Normalize each dataset to a 0–1 scale.
+
+Apply the probability formula to combine the variables into a unified index.
+
+Save the result as NetCDF (.nc) and GeoTIFF (.tif) files.
+
+Generate an interactive heat map with folium, plotting each point with a color scale (Turbo) from blue (low) to red (high) probability.
+
+🗺️ Final Output
+The resulting map, mapa_interativo_tubarao.html, displays:
+
+Each point representing a region analyzed by the model.
+
+Hover and click functionality to view intensity values (0–1).
+
+Zoom and navigation controls for user exploration.
+
+🌐 5. Example Visualization
+Below is a conceptual representation of how the probability intensity is visualized:
+
+Intensity	Color	Meaning
+0.0 – 0.3	🟦 Blue	Very low probability
+0.3 – 0.6	🟨 Yellow	Moderate probability
+0.6 – 0.9	🟧 Orange	High probability
+0.9 – 1.0	🟥 Red	Very high probability (most likely shark zones)
+
+🚀 6. Environmental Importance and NASA Challenge Impact
+This project demonstrates how open satellite data can be used to:
+
+Predict the presence of apex predators like sharks.
+
+Monitor ecosystem health and marine biodiversity.
+
+Support conservation decisions and sustainable fishing policies.
+
+By integrating field-inspired sensor data (ESP32 Tag) with global satellite datasets, the Neutronics Team presents a scalable model that fulfills the NASA Space Apps 2025 challenge on shark tracking and ocean monitoring.
+
+The tool allows both scientists and conservationists to visualize, quantify, and predict shark behavior patterns based on environmental drivers.
+
+📂 Repository Structure
+plaintext
+Copiar código
+/
+├── PACE_OCI.clorofila_fitoplancton.nc      # Chlorophyll data from PACE mission
+├── AQUA_MODIS_Temperature.nc               # SST data from MODIS Aqua
+├── SWOT_WindWave.nc                        # Sea wave height data from SWOT
+├── mapa_interativo_tubarao.html            # Final interactive probability map
+├── preprocessing_and_mapping.ipynb         # Full Google Colab code
+└── README_EN.md                            # This document
+🧩 Dependencies
+To reproduce or visualize the analysis locally:
+
+bash
+Copiar código
+pip install xarray rasterio folium numpy matplotlib netCDF4
+🧠 Authors
+Neutronics Team
+NASA Space Apps Challenge 2025
+Brazil
