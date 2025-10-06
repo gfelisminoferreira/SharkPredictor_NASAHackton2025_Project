@@ -135,9 +135,9 @@ To reproduce or visualize the analysis locally, install the required packages:
 
 ```bash
 pip install xarray rasterio folium numpy matplotlib netCDF4
+```
 
-
-🧠 Authors
+##🧠 Authors
 
 Neutronics Team
 NASA Space Apps Challenge 2025
