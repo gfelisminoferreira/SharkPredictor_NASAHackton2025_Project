@@ -45,118 +45,94 @@ This creates a **direct bridge between field measurements and satellite-derived 
 
 ---
 
+
 ## 🧮 3. Mathematical Probability Formula
 
-To quantify the probability of shark presence, the project applied a **weighted normalization formula** that integrates the three environmental variables (chlorophyll, SST, and SWH):
+To quantify the probability of shark presence, the project applied a **weighted normalization formula** that integrates the three environmental variables — **chlorophyll (Chl)**, **sea surface temperature (SST)**, and **significant wave height (SWH)**:
 
-```math
-I = α * (1 - |SST - SSTₒₚₜ| / ΔSST) + β * (Chl / max(Chl)) + γ * (1 - SWH / max(SWH))
-Where:
+$$
+I = \alpha \cdot \left(1 - \frac{|SST - SST_{opt}|}{\Delta SST}\right) + \beta \cdot \left(\frac{Chl}{max(Chl)}\right) + \gamma \cdot \left(1 - \frac{SWH}{max(SWH)}\right)
+$$
 
-𝐼
-I: Shark probability index (0 to 1)
+**Where:**
 
-𝛼
-,
-𝛽
-,
-𝛾
-α,β,γ: Weights for each variable (0.5, 0.3, 0.2 respectively)
+| Symbol | Meaning | Description |
+|:-------:|:---------|:-------------|
+| **I** | Shark Probability Index | Normalized between 0 and 1 |
+| **α, β, γ** | Variable Weights | (0.5, 0.3, 0.2) respectively |
+| **SSTₒₚₜ** | Optimal Temperature | Based on ecological literature |
+| **ΔSST** | Temperature Range | Used for normalization |
+| **Chl** | Chlorophyll Concentration | Indicates plankton presence |
+| **SWH** | Significant Wave Height | Represents sea surface turbulence |
 
-𝑆
-𝑆
-𝑇
-𝑜
-𝑝
-𝑡
-SST 
-opt
-​
- : Optimal temperature for shark activity (based on ecological literature)
+This formula produces a **composite map** of potential shark presence, normalized between **0 (low likelihood)** and **1 (high likelihood)**.
 
-Δ
-𝑆
-𝑆
-𝑇
-ΔSST: Temperature range normalization
+---
 
-𝐶
-ℎ
-𝑙
-Chl: Chlorophyll concentration
+## 💻 4. Code Operation and Processing Pipeline
 
-𝑆
-𝑊
-𝐻
-SWH: Significant Wave Height
+The entire data processing pipeline was implemented in **Google Colab** using **Python** and scientific libraries such as:
+`xarray`, `rasterio`, `folium`, and `numpy`.
 
-This formula produces a composite map of potential shark presence, normalized between 0 (low likelihood) and 1 (high likelihood).
+### 🧠 Processing Steps
 
-💻 4. Code Operation and Processing Pipeline
-The entire data processing pipeline was implemented in Google Colab using Python and scientific libraries such as:
-xarray, rasterio, folium, and numpy.
+1. **Load** the NetCDF datasets (PACE, MODIS, and SWOT).  
+2. **Resample** all datasets to a common 0.1° grid for spatial alignment.  
+3. **Normalize** each dataset to a 0–1 scale.  
+4. **Apply** the probability formula to combine variables into a unified index.  
+5. **Save** the result as `.nc` (NetCDF) and `.tif` (GeoTIFF) files.  
+6. **Generate** an interactive heat map with **Folium**, applying a **Turbo color scale** from blue (low) to red (high) probability.
 
-🧠 Processing Steps
-Load the NetCDF datasets (PACE, MODIS, and SWOT).
+---
 
-Resample all datasets to a common grid (0.1° resolution) to ensure spatial alignment.
+## 🗺️ 5. Final Output
 
-Normalize each dataset to a 0–1 scale.
+The resulting map — **`mapa_interativo_tubarao.html`** — displays:
 
-Apply the probability formula to combine the variables into a unified index.
+- Each point representing an analyzed region.
+- **Hover and click** interactions showing the probability intensity (0–1).
+- **Zoom and navigation** controls for user exploration.
 
-Save the result as NetCDF (.nc) and GeoTIFF (.tif) files.
+### Example of Visualization
 
-Generate an interactive heat map with folium, plotting each point with a color scale (Turbo) from blue (low) to red (high) probability.
+| Intensity | Color | Meaning |
+|:-----------|:------|:--------|
+| 0.0 – 0.3 | 🟦 Blue | Very low probability |
+| 0.3 – 0.6 | 🟨 Yellow | Moderate probability |
+| 0.6 – 0.9 | 🟧 Orange | High probability |
+| 0.9 – 1.0 | 🟥 Red | Very high probability (most likely shark zones) |
 
-🗺️ Final Output
-The resulting map, mapa_interativo_tubarao.html, displays:
+---
 
-Each point representing a region analyzed by the model.
+## 🚀 6. Environmental Importance and NASA Challenge Impact
 
-Hover and click functionality to view intensity values (0–1).
+This project demonstrates how **open satellite data** can be leveraged to:
 
-Zoom and navigation controls for user exploration.
+- Predict the **presence of apex predators** like sharks.  
+- Monitor **ecosystem health** and **marine biodiversity**.  
+- Support **conservation policies** and **sustainable fishing** strategies.  
 
-🌐 5. Example Visualization
-Below is a conceptual representation of how the probability intensity is visualized:
+By integrating **field sensor data (ESP32 Tag)** with **global satellite datasets**, the **Neutronics Team** presents a **scalable model** addressing the **NASA Space Apps 2025 Challenge** on shark tracking and ocean monitoring.
 
-Intensity	Color	Meaning
-0.0 – 0.3	🟦 Blue	Very low probability
-0.3 – 0.6	🟨 Yellow	Moderate probability
-0.6 – 0.9	🟧 Orange	High probability
-0.9 – 1.0	🟥 Red	Very high probability (most likely shark zones)
+The tool allows scientists and conservationists to **visualize, quantify, and predict** shark behavior patterns based on environmental factors.
 
-🚀 6. Environmental Importance and NASA Challenge Impact
-This project demonstrates how open satellite data can be used to:
+---
 
-Predict the presence of apex predators like sharks.
+## 📂 Repository Structure
+├── PACE_OCI.clorofila_fitoplancton.nc # Chlorophyll data (PACE mission)
+├── AQUA_MODIS_Temperature.nc # SST data (MODIS Aqua)
+├── SWOT_WindWave.nc # Sea wave height data (SWOT mission)
+├── mapa_interativo_tubarao.html # Final interactive probability map
+├── preprocessing_and_mapping.ipynb # Full Google Colab code
+└── README_EN.md # This document
 
-Monitor ecosystem health and marine biodiversity.
+To reproduce or visualize the analysis locally, install the required packages:
 
-Support conservation decisions and sustainable fishing policies.
-
-By integrating field-inspired sensor data (ESP32 Tag) with global satellite datasets, the Neutronics Team presents a scalable model that fulfills the NASA Space Apps 2025 challenge on shark tracking and ocean monitoring.
-
-The tool allows both scientists and conservationists to visualize, quantify, and predict shark behavior patterns based on environmental drivers.
-
-📂 Repository Structure
-plaintext
-Copiar código
-/
-├── PACE_OCI.clorofila_fitoplancton.nc      # Chlorophyll data from PACE mission
-├── AQUA_MODIS_Temperature.nc               # SST data from MODIS Aqua
-├── SWOT_WindWave.nc                        # Sea wave height data from SWOT
-├── mapa_interativo_tubarao.html            # Final interactive probability map
-├── preprocessing_and_mapping.ipynb         # Full Google Colab code
-└── README_EN.md                            # This document
-🧩 Dependencies
-To reproduce or visualize the analysis locally:
-
-bash
-Copiar código
+```bash
 pip install xarray rasterio folium numpy matplotlib netCDF4
+
 🧠 Authors
+
 Neutronics Team
 NASA Space Apps Challenge 2025
 Brazil
