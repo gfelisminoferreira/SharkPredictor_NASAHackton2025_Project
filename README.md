@@ -51,7 +51,9 @@ This creates a **direct bridge between field measurements and satellite-derived 
 To quantify the probability of shark presence, the project applied a **weighted normalization formula** that integrates the three environmental variables — **chlorophyll (Chl)**, **sea surface temperature (SST)**, and **significant wave height (SWH)**:
 
 $$
-I = \alpha \cdot \left(1 - \frac{|SST - SST_{opt}|}{\Delta SST}\right) + \beta \cdot \left(\frac{Chl}{max(Chl)}\right) + \gamma \cdot \left(1 - \frac{SWH}{max(SWH)}\right)
+I = \alpha \cdot \left(1 - \frac{|SST - SST_{\text{opt}}|}{\Delta SST}\right) 
+    + \beta \cdot \left(\frac{Chl}{\max(Chl)}\right) 
+    + \gamma \cdot \left(1 - \frac{SWH}{\max(SWH)}\right)
 $$
 
 **Where:**
